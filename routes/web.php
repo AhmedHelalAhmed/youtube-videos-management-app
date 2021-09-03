@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\IndexingChannelController;
+use App\Http\Controllers\ShowingChannelController;
+use App\Http\Controllers\StoringChannelController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,3 +30,14 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+
+Route::middleware(['auth:sanctum', 'verified'])
+    ->get('/channels', IndexingChannelController::class)
+    ->name('channels.index');
+Route::middleware(['auth:sanctum', 'verified'])
+    ->post('/channels', StoringChannelController::class)
+    ->name('channels.store');
+Route::middleware(['auth:sanctum', 'verified'])
+    ->get('/channels/{channel}', ShowingChannelController::class)
+    ->name('channels.show');
