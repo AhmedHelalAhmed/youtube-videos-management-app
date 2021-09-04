@@ -15,7 +15,23 @@ class ShowingChannelController
             'channel' => $channel,
             'videos' => Video::where('channel_id', $channel->id)
                 ->orderByDesc('published_at')
+                ->when(request('title'), function ($q,$title) {
+                    $q->where('title','like','%'.$title.'%');
+                })
+                ->when(request('is_favorite') === 'no', function ($q) {
+                    $q->whereNull('favorite_at');
+                })
+                ->when(request('is_favorite') === 'yes', function ($q) {
+                    $q->whereNotNull('favorite_at');
+                })
+                ->when(request('is_seen') === 'no', function ($q) {
+                    $q->whereNull('seen_at');
+                })
+                ->when(request('is_seen',) === 'yes', function ($q) {
+                    $q->whereNotNull('seen_at');
+                })
                 ->paginate()
+                ->appends(request()->all())
         ]);
     }
 }

@@ -4,12 +4,67 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ channel.name }} ({{ videos.total }})
             </h2>
-            <div class="flex justify-end">
+
+            <div class="flex justify-between mt-2">
+                <button
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    @click="show_filters=!show_filters">{{ show_filters ? 'Hide' : 'Show' }} Filters
+                </button>
+
                 <form @submit.prevent="submit">
                     <button
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         type="submit">
                         Sync Videos
+                    </button>
+                </form>
+
+            </div>
+            <div v-if="show_filters">
+                <form @submit.prevent="filter">
+                    <div class="pt-2 relative mx-auto text-gray-600">
+                        <input
+                            class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                            type="search" name="title" placeholder="Search by title" v-model="form.title">
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-gray-700">Is favourite?</span>
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="is_favorite" v-model="form.is_favorite"
+                                       value="yes">
+                                <span class="ml-2">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center ml-6">
+                                <input type="radio" class="form-radio" name="is_favorite" v-model="form.is_favorite"
+                                       value="no">
+                                <span class="ml-2">No</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-gray-700">Is seen?</span>
+                        <div class="mt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="is_seen" v-model="form.is_seen"
+                                       value="yes">
+                                <span class="ml-2">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center ml-6">
+                                <input type="radio" class="form-radio" name="is_seen" v-model="form.is_seen" value="no">
+                                <span class="ml-2">No</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button
+                        class="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="submit">
+                        Filter
+                    </button>
+                    <button
+                        class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="reset" @click="resetForm">
+                        Reset
                     </button>
                 </form>
             </div>
@@ -64,6 +119,7 @@
 
                                                 <div class="md:px-2 mt-3 md:mt-0 items-center flex">
                                                     <button
+                                                        @click="markVideoAsSeen(video.id)"
                                                         :class="{'cursor-not-allowed': video.seen_at}"
                                                         class="bg-blue-500 text-white font-bold px-4 py-2 text-sm uppercase rounded tracking-wider focus:outline-none hover:bg-blue-600">
                                                         <svg class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none"
@@ -75,6 +131,7 @@
                                                     </button>
 
                                                     <button
+                                                        @click="addVideoToFavourites(video.id)"
                                                         :class="{'cursor-not-allowed': video.favorite_at}"
                                                         class="inline-block ml-1 bg-indigo-500 px-4 py-2 text-white font-semibold rounded-lg hover:shadow-lg transition duration-3000 cursor-pointer hover:bg-indigo-600">
 
@@ -108,21 +165,43 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
-import {Inertia} from '@inertiajs/inertia'
-import Pagination from '@/Components/Pagination'
+import {defineComponent, reactive} from 'vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
+import {Inertia} from '@inertiajs/inertia';
+import Pagination from '@/Components/Pagination';
 import Button from "../../../Jetstream/Button";
 
 export default defineComponent({
     setup() {
+        const params = route().params;
+
+        const form = reactive({
+            is_seen: params.is_seen ? params.is_seen : null,
+            is_favorite: params.is_favorite ? params.is_favorite : null,
+            title: params.title ? params.title : null,
+            page: 1
+        });
+
+        function filter() {
+            console.log(form);
+            // form.page=this.videos.current_page;
+            Inertia.get(route('channels.show', this.channel.id), form);
+        }
+
         function submit() {
             if (confirm('Sync videos! Are you sure?')) {
                 Inertia.post(route('channels.show.sync-videos', this.channel.id));
             }
         }
 
-        return {submit}
+        function resetForm() {
+            form.is_seen = null;
+            form.is_favorite = null;
+            form.title = null;
+            console.log(form);
+        }
+
+        return {submit, filter, form, params, resetForm};
     },
     props: {
         channel: Object,
@@ -133,5 +212,31 @@ export default defineComponent({
         AppLayout,
         Pagination
     },
+    data() {
+        return {
+            show_filters: false
+        }
+    },
+    methods: {
+        markVideoAsSeen(videoId) {
+            Inertia.post(route('videos.toggle-seen', videoId));
+
+        },
+        addVideoToFavourites(videoId) {
+            Inertia.post(route('videos.toggle-favourite', videoId));
+        }
+    },
+    mounted() {
+        let parameterValidCount = 0;
+        for (let parameterName in this.params) {
+            if (this.params[parameterName] && parameterName != 'channel') {
+                console.log(this.params[parameterName]);
+                ++parameterValidCount;
+            }
+        }
+        if (parameterValidCount > 1) {
+            this.show_filters = true;
+        }
+    }
 })
 </script>

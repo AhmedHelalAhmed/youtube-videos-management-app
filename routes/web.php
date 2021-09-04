@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\TogglingFavouriteController;
 use App\Http\Controllers\IndexingChannelController;
+use App\Http\Controllers\TogglingVideoSeenController;
 use App\Http\Controllers\ShowingChannelController;
 use App\Http\Controllers\StoringChannelController;
 use App\Http\Controllers\SyncVideosController;
@@ -45,3 +47,11 @@ Route::middleware(['auth:sanctum', 'verified'])
 Route::middleware(['auth:sanctum', 'verified'])
     ->post('/channels/{channel}/sync-videos', SyncVideosController::class)
     ->name('channels.show.sync-videos');
+
+Route::middleware(['auth:sanctum', 'verified'])
+    ->post('/videos/{video}/toggle-seen', TogglingVideoSeenController::class)
+    ->name('videos.toggle-seen');
+
+Route::middleware(['auth:sanctum', 'verified'])
+    ->post('/videos/{video}/toggle-favourite', TogglingFavouriteController::class)
+    ->name('videos.toggle-favourite');
