@@ -155,9 +155,7 @@
                     <pagination class="mt-6 mb-6 p-2" :links="videos.links"/>
 
 
-                    <p class="text-center text-gray-500 text-xs">
-                        &copy;2021 Ahmed Helal Ahmed. All rights reserved.
-                    </p>
+
                 </div>
             </div>
         </div>

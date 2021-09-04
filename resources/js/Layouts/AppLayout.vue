@@ -227,6 +227,9 @@
             <main>
                 <slot></slot>
             </main>
+            <p class="text-center text-gray-500 text-xs mb-1">
+                &copy;2021 Ahmed Helal Ahmed. All rights reserved.
+            </p>
         </div>
     </div>
 </template>

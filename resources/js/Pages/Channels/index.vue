@@ -57,11 +57,8 @@
                             </a>
 
                         </div>
-                        <pagination class="mt-6 mb-6 p-2" :links="channels.links"/>
+                        <pagination class="mt-1 mb-1 p-2" :links="channels.links"/>
                     </section>
-                    <p class="text-center text-gray-500 text-xs">
-                        &copy;2021 Ahmed Helal Ahmed. All rights reserved.
-                    </p>
                 </div>
             </div>
         </div>
