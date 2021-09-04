@@ -4,14 +4,14 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\StoreChannelRequest;
 use App\Models\Channel;
-use Illuminate\Support\Arr;
 
 class StoringChannelController
 {
-    public function __invoke()
+    public function __invoke(StoreChannelRequest $request)
     {
-        Channel::create(array_merge(request()->only(['name', 'remote_identifier']),['user_id'=>auth()->id()]));
+        Channel::create($request->validated());
 
         return back();
     }

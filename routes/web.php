@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\TogglingFavouriteController;
 use App\Http\Controllers\IndexingChannelController;
-use App\Http\Controllers\TogglingVideoSeenController;
 use App\Http\Controllers\ShowingChannelController;
 use App\Http\Controllers\StoringChannelController;
 use App\Http\Controllers\SyncVideosController;
+use App\Http\Controllers\TogglingFavouriteController;
+use App\Http\Controllers\TogglingVideoSeenController;
+use App\Models\Channel;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,7 +33,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return redirect()->route('channels.index');
 })->name('dashboard');
 
 

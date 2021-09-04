@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="Dashboard">
+    <app-layout title="Videos">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ channel.name }} ({{ videos.total }})
