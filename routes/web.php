@@ -46,9 +46,12 @@ Route::middleware(['auth:sanctum', 'verified'])
     ->name('channels.store');
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('/channels/{channel}', ShowingChannelController::class)
+    ->middleware('can:show-channel,channel')
     ->name('channels.show');
+
 Route::middleware(['auth:sanctum', 'verified'])
     ->post('/channels/{channel}/sync-videos', SyncVideosController::class)
+    ->middleware('can:show-channel,channel')
     ->name('channels.show.sync-videos');
 
 Route::middleware(['auth:sanctum', 'verified'])
