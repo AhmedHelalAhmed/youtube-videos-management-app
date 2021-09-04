@@ -42,19 +42,16 @@ class StoreChannelRequest extends FormRequest
         $this->merge(['user_id' => auth()->id()]);
     }
 
-    private function getChannelIdFromLink(string $url): string
+    private function getChannelIdFromLink(string $url): ?string
     {
-        $parsed = parse_url(rtrim($url, '/'));
-        if (isset($parsed['path']) && preg_match('/^\/channel\/(([^\/])+?)$/', $parsed['path'], $matches)) {
-            return $matches[1];
-        }
         return (new GettingChannelIdByLinkService)->execute($url);
     }
 
     public function messages()
     {
         return [
-            'remote_identifier.unique' => 'Channel already exists'
+            'remote_identifier.unique' => 'Channel already exists!',
+            'remote_identifier.required' => 'The link is wrong!'
         ];
     }
 }

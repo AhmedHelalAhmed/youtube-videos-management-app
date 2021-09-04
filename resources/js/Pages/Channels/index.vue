@@ -31,7 +31,10 @@
                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                                        id="link" type="url" name="link" placeholder="Channel link">
                                 <div v-if="errors.link" class="text-red-600">{{ errors.link }}</div>
-                                <div v-if="errors.remote_identifier" class="text-red-600">{{ errors.remote_identifier }}</div>
+                                <div v-if="errors.remote_identifier" class="text-red-600">{{
+                                        errors.remote_identifier
+                                    }}
+                                </div>
 
                             </div>
                             <div class="flex items-center justify-between">
@@ -79,7 +82,9 @@ export default defineComponent({
         })
 
         function submit() {
-            Inertia.post('/channels', form)
+            Inertia.post('/channels', form);
+            form.name = null;
+            form.link = null;
         }
 
         return {form, submit}
