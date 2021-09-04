@@ -10,6 +10,6 @@ class SyncVideosController
     public function __invoke(Channel $channel)
     {
         dispatch(new SyncVideosForGivenChannelJob($channel));
-        return back();
+        return back()->with('message', 'Sync under processing please wait some minutes and try to refresh the page again. . .');
     }
 }

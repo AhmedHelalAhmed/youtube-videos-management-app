@@ -69,12 +69,15 @@
                 </form>
             </div>
         </template>
-
         <div class="py-12">
+
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="text-center p-6 border-gray-200">
-
+                        <div v-if="$page.props.flash.message" class="text-blue-400 text-4xl mb-3">
+                            {{ $page.props.flash.message }}
+                        </div>
+                        <div v-if="!videos.data.length">No videos to show</div>
                         <div
                             v-for="video in videos.data"
                             :key="video.id"
@@ -181,7 +184,6 @@ export default defineComponent({
         });
 
         function filter() {
-            console.log(form);
             // form.page=this.videos.current_page;
             Inertia.get(route('channels.show', this.channel.id), form);
         }
@@ -196,7 +198,6 @@ export default defineComponent({
             form.is_seen = null;
             form.is_favorite = null;
             form.title = null;
-            console.log(form);
         }
 
         return {submit, filter, form, params, resetForm};
@@ -228,7 +229,6 @@ export default defineComponent({
         let parameterValidCount = 0;
         for (let parameterName in this.params) {
             if (this.params[parameterName] && parameterName != 'channel') {
-                console.log(this.params[parameterName]);
                 ++parameterValidCount;
             }
         }
