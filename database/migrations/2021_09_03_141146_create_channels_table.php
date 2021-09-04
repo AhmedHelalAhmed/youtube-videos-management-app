@@ -16,8 +16,8 @@ class CreateChannelsTable extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('identifier');
-            $table->foreignId('user_id');
+            $table->string('remote_identifier');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

@@ -11,7 +11,12 @@ class Channel extends Model
 
     protected $fillable = [
         'name',
-        'identifier',
+        'remote_identifier',
         'user_id'
     ];
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 }

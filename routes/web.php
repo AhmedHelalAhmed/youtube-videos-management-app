@@ -3,6 +3,7 @@
 use App\Http\Controllers\IndexingChannelController;
 use App\Http\Controllers\ShowingChannelController;
 use App\Http\Controllers\StoringChannelController;
+use App\Http\Controllers\SyncVideosController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,3 +42,6 @@ Route::middleware(['auth:sanctum', 'verified'])
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('/channels/{channel}', ShowingChannelController::class)
     ->name('channels.show');
+Route::middleware(['auth:sanctum', 'verified'])
+    ->post('/channels/{channel}/sync-videos', SyncVideosController::class)
+    ->name('channels.show.sync-videos');

@@ -20,12 +20,12 @@
                                        id="name" type="text" placeholder="Username">
                             </div>
                             <div class="mb-6">
-                                <label class="block text-gray-700 text-sm font-bold mb-2" for="identifier">
-                                    Identifier
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="remote_identifier">
+                                    Remote identifier
                                 </label>
-                                <input v-model="form.identifier"
+                                <input v-model="form.remote_identifier"
                                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                                       id="identifier" type="password" placeholder="******************">
+                                       id="remote_identifier" type="text" placeholder="Remote identifier">
                             </div>
                             <div class="flex items-center justify-between">
                                 <button
@@ -63,7 +63,7 @@ export default defineComponent({
     setup() {
         const form = reactive({
             name: null,
-            identifier: null,
+            remote_identifier: null,
         })
 
         function submit() {
