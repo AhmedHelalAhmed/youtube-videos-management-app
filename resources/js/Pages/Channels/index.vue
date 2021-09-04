@@ -44,7 +44,7 @@
                         </form>
 
                     </div>
-                    <section class="text-center">
+                    <section class="text-center" v-if="channels.data.length">
                         <h1 class="text-center mt-10 text-4xl font-bold">Channels</h1>
                         <div v-for="channel in channels.data" :key="channel.id" class="font-bold p-6 border-gray-200">
                             <a :href="route('channels.show',channel.id)">
