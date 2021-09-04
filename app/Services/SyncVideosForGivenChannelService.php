@@ -43,7 +43,7 @@ class SyncVideosForGivenChannelService
             $this->AddMoreVideosData(Arr::get($response, 'items', []), $channel);
         }
 
-        $videos = $this->filterVideosToNotExistsVideos($this->getExistsRemoteIds());
+        $videos = $this->filterVideosToNotExistsVideos($this->getExistsRemoteIds($channel->id));
 
         if ($videos->isNotEmpty()) {
             return Video::insert($videos->toArray());
@@ -86,9 +86,11 @@ class SyncVideosForGivenChannelService
     /**
      * @return mixed
      */
-    public function getExistsRemoteIds()
+    public function getExistsRemoteIds($channelId)
     {
-        return Video::Select('remote_identifier')->pluck('remote_identifier');
+        return Video::where('channel_id',$channelId)
+            ->select('remote_identifier')
+            ->pluck('remote_identifier');
     }
 
 }
