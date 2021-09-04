@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Services\GettingChannelIdByLinkService;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreChannelRequest extends FormRequest
 {
@@ -25,10 +26,13 @@ class StoreChannelRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'link' => 'required|url',
-            'remote_identifier' => 'required|unique:channels,remote_identifier',
-            'user_id' => 'required'
+            'name' => ['required'],
+            'link' => ['required', 'url'],
+            'remote_identifier' => [
+                'required',
+                Rule::unique('channels')->where('user_id', auth()->id())
+            ],
+            'user_id' => ['required']
         ];
     }
 
